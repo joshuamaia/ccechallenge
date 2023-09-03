@@ -1,0 +1,9 @@
+<mat-toolbar color="primary">
+  <span routerLink="" style="cursor: pointer">Início</span>
+  <button mat-icon-button [matMenuTriggerFor]="menu">
+    <mat-icon>menu</mat-icon>
+  </button>
+  <mat-menu #menu="matMenu">
+    <button mat-menu-item routerLink="/regioes">Regiões</button>
+  </mat-menu>
+</mat-toolbar>

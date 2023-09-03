@@ -1,0 +1,38 @@
+version: '3'
+
+services:
+  frontend:
+    container_name: frontend
+    build: "./frontend"
+    ports:
+      - 4200:4200
+
+  db:
+    container_name: db
+    image: postgres:12
+    env_file:
+      - .env
+    volumes:
+      - "./data/postgres:/var/lib/postgres/data"
+    ports:
+      - 5433:5432
+    networks:
+      - ccee-challenge-networks
+
+  backend:
+    container_name: backend
+    restart: on-failure:5
+    build: "./backend"
+    depends_on:
+      - db
+    networks:
+      - ccee-challenge-networks
+    env_file:
+      - .env
+    ports:
+      - 8080:8080
+
+networks:
+  ccee-challenge-networks:
+    name: ccee-challenge-networks
+    driver: bridge

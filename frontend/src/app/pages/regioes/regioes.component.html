@@ -1,0 +1,60 @@
+<div class="container mat-h2">
+  <h2 class="mat-h2 mat-margin">Lista de Regiões</h2>
+  <div *ngIf="enviandoArquivo" class="container mat-h2">
+    <mat-spinner></mat-spinner>
+  </div>
+
+  <!-- Campo de entrada para pesquisa -->
+  <mat-form-field *ngIf="!enviandoArquivo">
+    <mat-label>Selecione uma região</mat-label>
+    <select matNativeControl [(ngModel)]="pesquisaRegiao" name="regiao">
+      <option value="" selected></option>
+      <option *ngFor="let regiao of listaRegioes" [value]="regiao">
+        {{ regiao }}
+      </option>
+    </select>
+  </mat-form-field>
+
+  <!-- Botão de busca -->
+  <button
+    *ngIf="!enviandoArquivo"
+    mat-raised-button
+    color="primary"
+    (click)="buscarRegiaoBySigla()"
+  >
+    Buscar
+  </button>
+
+  <table mat-table [dataSource]="dataSource" class="mat-elevation-z8 tabela">
+    <!--- Note that these columns can be defined in any order.
+          The actual rendered columns are set as a property on the row definition" -->
+
+    <!-- Position Column -->
+    <ng-container matColumnDef="Sigla">
+      <th mat-header-cell *matHeaderCellDef>Sigla</th>
+      <td mat-cell *matCellDef="let element">{{ element.sigla }}</td>
+    </ng-container>
+
+    <ng-container matColumnDef="Compra">
+      <th mat-header-cell *matHeaderCellDef>Compra - Valores</th>
+      <td mat-cell *matCellDef="let element">
+        {{ fomatarValores(element.compra.valor) }}
+      </td>
+    </ng-container>
+
+    <ng-container matColumnDef="Geracao">
+      <th mat-header-cell *matHeaderCellDef>Geração - Valores</th>
+      <td mat-cell *matCellDef="let element">
+        {{ fomatarValores(element.geracao.valor) }}
+      </td>
+    </ng-container>
+
+    <tr mat-header-row *matHeaderRowDef="displayedColumns"></tr>
+    <tr mat-row *matRowDef="let row; columns: displayedColumns"></tr>
+  </table>
+  <mat-paginator
+    #paginator
+    [pageSizeOptions]="[5, 10, 15]"
+    showFirstLastButtons
+  ></mat-paginator>
+</div>
