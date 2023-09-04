@@ -1,8 +1,39 @@
 <div class="container mat-h2">
-  <h2 class="mat-h2 mat-margin">Lista de Regiões</h2>
+  <h2 class="mat-h2 mat-margin">Consolidado Regiões</h2>
+
+  <table
+    mat-table
+    [dataSource]="dataSourceConsolidadp"
+    class="mat-elevation-z8 tabela"
+  >
+    <ng-container matColumnDef="Sigla">
+      <th mat-header-cell *matHeaderCellDef>Sigla</th>
+      <td mat-cell *matCellDef="let element">{{ element.sigla }}</td>
+    </ng-container>
+
+    <ng-container matColumnDef="Compra">
+      <th mat-header-cell *matHeaderCellDef>Compra - Consolidado</th>
+      <td mat-cell *matCellDef="let element">
+        {{ element.valorcompra | currency : "BRL" }}
+      </td>
+    </ng-container>
+
+    <ng-container matColumnDef="Geracao">
+      <th mat-header-cell *matHeaderCellDef>Geração - Consolidado</th>
+      <td mat-cell *matCellDef="let element">
+        {{ element.valorgeracao | currency : "BRL" }}
+      </td>
+    </ng-container>
+
+    <tr mat-header-row *matHeaderRowDef="displayedColumnsConsolidado"></tr>
+    <tr mat-row *matRowDef="let row; columns: displayedColumnsConsolidado"></tr>
+  </table>
+
   <div *ngIf="enviandoArquivo" class="container mat-h2">
     <mat-spinner></mat-spinner>
   </div>
+
+  <h2 class="mat-h2 mat-margin">Lista de Regiões</h2>
 
   <!-- Campo de entrada para pesquisa -->
   <mat-form-field *ngIf="!enviandoArquivo">
@@ -26,10 +57,6 @@
   </button>
 
   <table mat-table [dataSource]="dataSource" class="mat-elevation-z8 tabela">
-    <!--- Note that these columns can be defined in any order.
-          The actual rendered columns are set as a property on the row definition" -->
-
-    <!-- Position Column -->
     <ng-container matColumnDef="Sigla">
       <th mat-header-cell *matHeaderCellDef>Sigla</th>
       <td mat-cell *matCellDef="let element">{{ element.sigla }}</td>
@@ -38,14 +65,16 @@
     <ng-container matColumnDef="Compra">
       <th mat-header-cell *matHeaderCellDef>Compra - Valores</th>
       <td mat-cell *matCellDef="let element">
-        {{ fomatarValores(element.compra.valor) }}
+        {{ fomatarValores(element.compra.valor) }} : Total:
+        {{ totalValores(element.compra.valor) | currency : "BRL" }}
       </td>
     </ng-container>
 
     <ng-container matColumnDef="Geracao">
       <th mat-header-cell *matHeaderCellDef>Geração - Valores</th>
       <td mat-cell *matCellDef="let element">
-        {{ fomatarValores(element.geracao.valor) }}
+        {{ fomatarValores(element.geracao.valor) }} : Total:
+        {{ totalValores(element.geracao.valor) | currency : "BRL" }}
       </td>
     </ng-container>
 

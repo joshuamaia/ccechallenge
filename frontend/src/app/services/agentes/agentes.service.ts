@@ -8,7 +8,7 @@ import { environment } from 'src/environments/environment.development';
 export class AgentesService {
   constructor(private http: HttpClient) {}
 
-  apiUrl = environment.resourceUploadXml;
+  apiUrl = environment.apiURL;
 
   cadastrar(arquivo: File) {
     console.log('Entrei no envio de arquivo');
@@ -16,6 +16,9 @@ export class AgentesService {
 
     formData.append('file', arquivo);
 
-    return this.http.post<string[]>(this.apiUrl, formData);
+    return this.http.post<string[]>(
+      `${this.apiUrl}/agentes/upload-xml`,
+      formData
+    );
   }
 }

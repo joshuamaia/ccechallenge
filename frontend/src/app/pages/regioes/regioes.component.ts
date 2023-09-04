@@ -1,6 +1,7 @@
-import { Component, OnChanges, ViewChild } from '@angular/core';
+import { Component, OnInit, ViewChild } from '@angular/core';
 import { MatPaginator } from '@angular/material/paginator';
 import { MatTableDataSource } from '@angular/material/table';
+import { ConsolidadoRegiaoDto } from 'src/app/model/ConsolidadoRegiaoDto';
 import { IRegiao } from 'src/app/model/RegiaoModel';
 import { RegioesService } from 'src/app/services/regioes/regioes.service';
 
@@ -9,16 +10,26 @@ import { RegioesService } from 'src/app/services/regioes/regioes.service';
   templateUrl: './regioes.component.html',
   styleUrls: ['./regioes.component.css'],
 })
-export class RegioesComponent {
+export class RegioesComponent implements OnInit {
   @ViewChild('paginator') paginator!: MatPaginator;
   regioes: IRegiao[];
+  consolidadoRegiao: ConsolidadoRegiaoDto[] = [];
   pesquisaRegiao: String = 'NE';
   listaRegioes = ['SE', 'S', 'NE', 'N'];
   dataSource: any;
+  dataSourceConsolidadp: any;
   displayedColumns = ['Sigla', 'Compra', 'Geracao'];
+  displayedColumnsConsolidado = ['Sigla', 'Compra', 'Geracao'];
   enviandoArquivo: boolean = false;
 
-  // @ViewChild(MatPaginator) paginator: MatPaginator;
+  ngOnInit() {
+    this.regioesService.consolidadoRegiao().subscribe((response) => {
+      this.consolidadoRegiao = response;
+      this.dataSourceConsolidadp = new MatTableDataSource(
+        this.consolidadoRegiao
+      );
+    });
+  }
 
   constructor(private regioesService: RegioesService) {
     this.pesquisaRegiao = '';
@@ -27,6 +38,10 @@ export class RegioesComponent {
 
   fomatarValores(valores: number[]) {
     return valores.join(' - ');
+  }
+
+  totalValores(valores: number[]) {
+    return valores.reduce((acc, valor) => (acc = acc + valor), 0);
   }
 
   buscarRegiaoBySigla(): void {
